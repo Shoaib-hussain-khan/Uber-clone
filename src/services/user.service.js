@@ -1,25 +1,34 @@
-const express = require('express');
-const cors = require('cors');
-const dotenv = require('dotenv');
-const createUser =async({
+
+const User = require('../model/user.model.js');
+
+module.exports = createUser = async ({
     firstname,
     lastname,
     email,
     password,
-})=>{
-    if(!firstname || !email || !password){
+}) => {
+    if (!firstname || !lastname || !email || !password) {
         throw new Error("All fields are required");
     }
-    const user = usermodel.create({
+
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+        throw new Error("User already exists");
+    }
+
+    const hashedPassword = await User.hashPassword(password);
+    const user = new User({
         fullname: {
             firstname,
-            lastname
+            lastname,
         },
         email,
-        password
+        password: hashedPassword,
+        socketid: "rider",
     });
+    await user.save();
     return user;
-}
+};
 
 
 

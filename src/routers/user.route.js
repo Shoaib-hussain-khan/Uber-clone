@@ -7,8 +7,8 @@ const userController = require('../controller/user.controller.js');
 
 
 
-const router = Router();
-router.post("/register",[
+const userRouter = Router();
+userRouter.post("/register",[
         body("email").isEmail().withMessage("Invalid email address"),
         body("password").isLength({ min: 6 }).withMessage("Password must be at least 6 characters long"),
         body("fullname.firstname").notEmpty().withMessage("First name is required"),
@@ -18,4 +18,4 @@ router.post("/register",[
 
 
 
-module.exports = router;
+module.exports = userRouter;
